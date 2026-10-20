@@ -1,0 +1,287 @@
+# Copy this file to config.yaml and fill in your own avatars and worlds.
+# Tip: `vrcompanion favorites` prints your favorited avatars/worlds with their ids.
+
+# Say this before every command: "computer, switch to avi 2"
+# Other ideas: "hey goblin", "abracadabra", "shazam", "yo minion", "my liege",
+# "okay peasant", "hey gremlin", "beep boop robot".
+# Use real English words (the speech model doesn't know slang or made-up
+# words), and something you'd never say mid-conversation in VRChat.
+wake_word: computer
+# Other words that count as the wake word, e.g. what it keeps mishearing
+# (the app's "Didn't catch that" list adds these for you).
+wake_word_aliases: []
+# How sure the speech model must be that it heard the wake word (0..1).
+# Lower it if it misses you; raise it if noise or other people set it off.
+wake_min_confidence: 0.3
+# Say just the wake word, wait for the blip, then the command: it counts if it
+# comes within this many seconds. 0 = wake word and command in one sentence.
+wake_window_seconds: 6
+
+# What to do after an instance is created:
+#   invite -> send yourself an invite (accept it from your in-game notifications)
+#   launch -> open a vrchat:// link (starts VRChat / jumps you straight in)
+#   none   -> just create it
+join_mode: invite
+
+# Used for worlds that don't set their own. One of:
+#   public, friends+, friends, invite+, invite
+default_instance_type: friends+
+# us (US West), use (US East), eu (Europe), jp (Japan)
+default_region: us
+
+# Shows "Switching to fox" etc. in your in-game chatbox. Needs OSC enabled
+# in VRChat (Action Menu -> Options -> OSC -> Enabled).
+chatbox_feedback: true
+osc_host: 127.0.0.1
+osc_port: 9000
+
+# Offline speech model. Download from https://alphacephei.com/vosk/models
+vosk_model_path: models/vosk-model-small-en-us-0.15
+# Only listen for command words + the names below (much more accurate).
+# Set to false if a name with unusual words never gets recognized.
+restrict_vocabulary: true
+
+# Chat mode ("computer, activate chat mode") sends everything you say to the
+# chatbox, so it needs to understand free speech, not just commands. The small
+# model above works, but a bigger one is noticeably more accurate. Recommended:
+# vosk-model-en-us-0.22-lgraph (128 MB) from the same page. Leave empty to use
+# the small model for chat too.
+chat_model_path: ""
+
+# Which speech-to-text to use in chat mode (commands always use Vosk):
+#   vosk    -> light and instant, no punctuation, mishears more
+#   whisper -> much more accurate, adds punctuation and capitals, ~1s slower,
+#              uses more CPU/GPU. Install with: pip install -e ".[voice,whisper]"
+#   remote  -> Whisper on another computer or a cloud service (see below and
+#              docs/server-setup.md). Nothing heavy runs on this PC.
+# You can also pick per run: vrcompanion listen --chat-engine whisper
+chat_engine: vosk
+# Whisper size: tiny, base, small, medium, large-v3 (bigger = better but slower).
+# "small" is a good balance; use "base" if it lags while VRChat is running.
+whisper_model: small
+# auto (GPU if available), cpu, or cuda
+whisper_device: auto
+# Language you speak. Empty = auto-detect.
+whisper_language: en
+
+# chat_engine: remote. Any server with the OpenAI transcription API:
+#   your own (Speaches):  remote_url: http://192.168.1.50:8000
+#                          remote_model: Systran/faster-whisper-small
+#   OpenAI:  remote_url: https://api.openai.com/v1   remote_model: gpt-4o-mini-transcribe
+#   Groq:    remote_url: https://api.groq.com/openai/v1   remote_model: whisper-large-v3-turbo
+# If the server can't be reached, chat falls back to the local Vosk model.
+remote_url: ""
+# The API key is best entered in the app (saved encrypted). A key written here
+# is moved into the encrypted secrets.dat when the app starts.
+remote_api_key: ""
+remote_model: Systran/faster-whisper-small
+
+# Push-to-talk instead of the wake word:
+#   off          say the wake word before every command
+#   hold         hold ptt_key while talking
+#   toggle       press ptt_key to start listening, again to stop
+#   steamvr      hold a VR controller button; pick it in SteamVR -> Settings ->
+#                Controllers -> Manage Controller Bindings -> VRCompanion
+#   vrchat_mute  listen while your VRChat mic is muted (needs OSC on)
+ptt_mode: "off"
+# A key name (f8, caps_lock, scroll_lock, ctrl_r, a letter like v) or a mouse
+# side button (mouse4, mouse5).
+ptt_key: f8
+
+# How long a pause (milliseconds) ends a sentence: shorter is snappier,
+# longer lets you pause mid-sentence.
+end_silence_ms: 700
+# Mic loudness that counts as speech (the line you can drag on the Home meter).
+# 0 = learn it from the room's background noise.
+mic_threshold: 0
+# Microphone: empty = Windows' default, or (part of) a device name.
+input_device: ""
+# Pause listening while VRChat isn't running; it starts again when the game opens.
+only_while_vrchat: true
+
+# Feedback you notice in VR: sound cues, and an experimental SteamVR overlay.
+sounds: true
+vr_overlay: false
+# A panel on your controller, tapped with your other hand: "off", "voice"
+# (say "open menu") or "always". Size: small, medium or large. Haptics: a buzz
+# when your fingertip is over a button and when you press it.
+wrist_menu: "off"
+wrist_menu_hand: left
+wrist_menu_size: medium
+wrist_menu_haptics: true
+# Move the panel: forward / up / right in cm (-10 to 10), tilt in degrees (-30 to 30).
+wrist_menu_offset: {forward: 0, up: 0, right: 0, tilt: 0}
+# Aim calibration, set by "calibrate aim" (or Settings > In VR): [pitch, yaw]
+# in degrees between where your pointing controller says it points and where
+# you really point. [0, 0] is no correction.
+wrist_menu_aim: [0, 0]
+# Say when a SteamVR controller, tracker or headset battery gets low (at this
+# percent, and again at half of it). Not while it's charging.
+battery_warnings: true
+battery_warning_percent: 20
+
+# Outfits: several avatar toggles at once ("computer, outfit cozy"). Easiest to
+# make by saying "computer, save current look" (saved as outfit 1, 2, ... for
+# the avatar you're wearing). "avatar": the avatar it belongs to; outfits only
+# apply to the avatar you're wearing ("switch to avatar 1 outfit 2" switches
+# first). No avatar = works on any avatar. Values: true/false or a number.
+outfits:
+  - name: cozy
+    aliases: [comfy]
+    values:
+      Hoodie: true
+      Hat: false
+      Socks: 2
+
+# Friend groups: "computer, invite the squad" invites everyone online in it.
+friend_groups:
+  - name: the squad
+    members: [alex, xX_Sam_Xx]
+
+# "computer, safe mode" / "panic": switch to a safe avatar (optional), set a
+# status ("" = leave it), and go straight to a private instance of your home.
+safe_mode:
+  avatar: ""
+  status: busy
+  go_home: true
+
+# A gentle reminder to take a break every N minutes of listening (0 = never).
+break_reminder_minutes: 0
+
+# Live captions of what people around you say (the game's sound), in VR and in
+# the app. Uses Whisper, or the speech server when chat_engine is "remote".
+# "computer, captions on", "computer, translate for me".
+captions_enabled: false
+captions_translate: false   # translate into English
+captions_language: ""       # e.g. ja; empty = detect it
+captions_device: ""         # output VRChat plays through; empty = the default
+
+# Live updates from VRChat while the app runs (needs you logged in): friends
+# coming online, friends joining your instance, invites and requests.
+# "computer, who's online", "computer, where's alex", "computer, accept".
+live_updates: true
+# Announce friends coming online: off, favorites (your VRChat favorites and the
+# friends listed below), or all.
+announce_online: favorites
+announce_joins: true
+
+# AI brain (optional): when a command doesn't match the usual phrases, Claude
+# works out what you meant ("put me in something comfy and open a cozy room"),
+# and your pet can talk back. Uses your own Anthropic API key; what you say
+# after the wake word is sent to Anthropic. Needs: pip install -e ".[ai]"
+ai_enabled: false
+ai_api_key: ""   # enter it in the app (saved encrypted), or use the ANTHROPIC_API_KEY env variable
+ai_model: claude-opus-5-5
+# anthropic: your own key (above). server: your account on a VRCompanion
+# server (docs/gateway.md), using remote_url and remote_api_key.
+ai_provider: anthropic
+
+# Port VRChat sends OSC to (current avatar, toggle states, mic mute). Set to 0
+# if another OSC app needs it.
+osc_listen_port: 9001
+
+# OSCQuery: read every toggle of the avatar you're wearing straight from VRChat
+# (no "Reset Config" needed), and if another OSC app has the port above, listen
+# on a free port instead and tell VRChat about it.
+oscquery: true
+
+# 0..1 -- how close a heard name must be to a name/alias to count.
+match_threshold: 0.6
+
+avatars:
+  # Leave out "name" and they're numbered by position: "switch to avi 1",
+  # "switch to avi 2", ... (you can also just say "switch to two").
+  - id: avtr_00000000-0000-0000-0000-000000000000   # avi 1
+  - id: avtr_11111111-1111-1111-1111-111111111111   # avi 2
+  - id: avtr_33333333-3333-3333-3333-333333333333   # avi 3
+  # Or give one a name (plus optional aliases) and say that instead.
+  # Keep names to real, easy words -- the speech model doesn't know made-up ones.
+  - name: fox
+    aliases: [foxy]
+    id: avtr_44444444-4444-4444-4444-444444444444
+
+worlds:
+  # "name" and every alias are what you say: "create new instance black cat".
+  # Instances are Friends+ unless you say otherwise ("...black cat private").
+  - name: black cat
+    aliases: [the cat, cat bar]
+    id: wrld_4cf554b4-430c-4f8f-b53e-1f294eed230b
+  - name: movie night
+    aliases: [movies, cinema]
+    id: wrld_22222222-2222-2222-2222-222222222222
+    # When you arrive in this world: switch avatar and/or put on an outfit.
+    # enter_avatar: avtr_...
+    # enter_outfit: outfit 2
+    # Optional per-world overrides for when you don't say a type/region:
+    # instance_type: invite+
+    # region: eu
+
+# Optional nicknames for friends ("computer, invite alex"). Online friends also
+# work by their VRChat display name without being listed here.
+friends:
+  - name: alex
+    display_name: xX_Alex_Xx
+
+# "computer, set status to streaming": a color (active / join me / ask me / busy)
+# and/or status text (up to 32 characters).
+status_presets:
+  - name: streaming
+    status: busy
+    message: Streaming on Twitch
+
+# Optional names for avatar toggles. Toggles are found automatically from
+# VRChat's OSC files; this is only for ones with awkward names.
+toggles:
+  - name: kitty ears
+    parameter: EarToggle
+
+# The pet on your avatar (see docs/pet-avatar.md for the avatar side).
+# Its name works as a wake word: "mochi, sit", "tell mochi to dance".
+pet:
+  enabled: false
+  name: mochi
+  chatbox_reactions: true
+  # Greets friends who come online or join you, and naps after this many quiet
+  # minutes (0 = never naps by itself).
+  reacts: true
+  sleep_after_minutes: 10
+  # The pet talks in its own speech bubble on the avatar instead of your
+  # chatbox (needs the bubble from the Unity tool).
+  bubble: true
+  # Letters sent per update: 2, 4 or 8 (24, 40 or 72 synced bits). Must match
+  # "Letters Per Update" on the avatar's VRCompanion Pet component.
+  text_letters: 4
+  # With the AI brain on, talk to it: "mochi, do you like pizza?"
+  personality: a playful, curious cat who loves headpats
+  # Long-term memory (memory.json): "mochi, remember that alex likes cats",
+  # plus a few notes it keeps by itself. The AI brain uses it too.
+  memory: true
+  # Other names it answers to, e.g. [kitty, little one].
+  aliases: []
+  # Says hello and gets happier when it meets another player's pet.
+  meetups: true
+  # Naps while you're AFK, sits and jumps with you, cheers at a thumbs-up.
+  copies_you: true
+  # Shy pet: when one of these avatar toggles turns on (e.g. your SPS toggle),
+  # it gets flustered and hides until it's off again. Exact parameter names.
+  shy_parameters: []
+  # The avatar parameter names the Unity tool uses. Only change them if they
+  # clash with something on your avatar (and change them in Unity too).
+  # state_parameter: PetState
+  # pat_parameter: PetPatted
+  # grab_parameter: PetGrab
+  # hot_cold_parameter: PetHotCold
+  # meet_parameter: PetMeet
+  # shown_parameter: PetOn
+  # text_parameter: PetText
+
+# The desktop app.
+# Start listening as soon as the app opens.
+listen_on_start: true
+# false: use the app without a VRChat login (avatar switching then goes over
+# OSC, which VRChat allows for avatars in your favorites).
+vrchat_account: true
+# Closing the window: "ask" (the first time), "tray" (keep running) or "quit".
+close_action: ask
+# Look for a newer version when the app starts.
+check_updates: true
